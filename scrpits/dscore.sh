@@ -63,6 +63,8 @@ function MemoryPool {
 		NAME='G1 Eden Space'
 	elif [ "${NAME}" == "G1OldSpace" ];then
 		NAME='G1 Old Gen'
+	elif [ "${NAME}" == "G1PermGen" ];then
+		NAME='G1 Perm Gen'
 	fi
 	${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${JMX_HOST}:${JMX_PORT} "java.lang:name=${NAME},type=MemoryPool" "Usage" &> /tmp/zabbix.dscore.MemoryPool.log
 	grep ${VALUE} /tmp/zabbix.dscore.MemoryPool.log|awk '{print $2}'

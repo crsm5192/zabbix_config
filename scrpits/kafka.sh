@@ -67,6 +67,31 @@ case $1 in
 		${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${KFK_SRV}:${KFK_JMX_PORT} "kafka.server:type=ReplicaManager,name=$2" "$3" &> /tmp/zabbix.kafka.ReplicaManager.log
 		awk '{print $6}' /tmp/zabbix.kafka.ReplicaManager.log
 	;;
+	#选举
+	ControllerStats)
+		${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${KFK_SRV}:${KFK_JMX_PORT} "kafka.controller:name=$2,type=ControllerStats" "Count" &> /tmp/zabbix.kafka.ControllerStats.log
+		awk '{print $6}' /tmp/zabbix.kafka.ControllerStats.log
+	;;
+	#节点
+	ActiveControllerCount)
+		${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${KFK_SRV}:${KFK_JMX_PORT} "kafka.controller:name=ActiveControllerCount,type=KafkaController" "Value" &> /tmp/zabbix.kafka.ActiveControllerCount.log
+		awk '{print $6}' /tmp/zabbix.kafka.ActiveControllerCount.log
+	;;
+	#网络1
+	SocketServer)
+		${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${KFK_SRV}:${KFK_JMX_PORT} "kafka.network:name=$2,type=SocketServer" "Value" &> /tmp/zabbix.kafka.SocketServer.log
+		awk '{print $6}' /tmp/zabbix.kafka.SocketServer.log
+	;;	
+	#网络2
+	KafkaRequestHandlerPool)
+		${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${KFK_SRV}:${KFK_JMX_PORT} "kafka.server:name=$2,type=KafkaRequestHandlerPool" "MeanRate" &> /tmp/zabbix.kafka.KafkaRequestHandlerPool.log
+		awk '{print $6}' /tmp/zabbix.kafka.KafkaRequestHandlerPool.log
+	;;
+	#zookeeper
+	SessionExpireListener)
+		${JDK}/bin/java -jar ${CMDLINE} ${JMX_USER}:${JMX_PWD} ${KFK_SRV}:${KFK_JMX_PORT} "kafka.server:name=$2,type=SessionExpireListener" "Count" &> /tmp/zabbix.kafka.SessionExpireListener.log
+		awk '{print $6}' /tmp/zabbix.kafka.SessionExpireListener.log
+	;;
 	*)
 		echo mntr |nc $KFK_SRV $KFK_PORT |grep $1 |awk '{print $2}'
 	;;
